@@ -10,7 +10,11 @@ const UserSchema = new Schema({
     username: String,
     password: String,
     usd: mongoose.SchemaTypes.Decimal128,
-    levelstaff: Number
+    levelstaff: Number,
+    coin: {
+        type: Array,
+        default: []
+    }
 })
 
 UserSchema.pre('save', function(next) {

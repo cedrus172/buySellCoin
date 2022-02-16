@@ -70,3 +70,10 @@ exports.updateCoinByCode = function(req, res, next) {
         }
     })
 }
+
+exports.updateCoinByCode2 = function(params) {
+    let code = params.code.toUpperCase();
+    CoinModel.updateOne({ code: code }, params, function(err, result) {
+        if (err) throw err;
+    })
+}

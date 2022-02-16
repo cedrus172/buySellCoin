@@ -7,7 +7,7 @@ const userRoute = require('./routes/userRoutes');
 const singlePageRoute = require('./routes/singlePageRoute');
 const coinRoute = require('./routes/coinRoutes');
 const orderRoute = require('./routes/orderRoutes');
-
+const priceRoute = require('./routes/priceRoutes');
 const expressSession = require('express-session');
 
 const checkAuth = require('./middleware/auth');
@@ -54,10 +54,10 @@ app.get('/', checkAuth, (req, res) => {
 
 app.use('/user', singlePageRoute);
 app.use('/order', checkAuth, orderRoute);
-
 app.use('/api/coin', coinRoute);
-
 app.use('/api/user', userRoute);
+app.use('/api/price', checkAuth, priceRoute);
+app.use('/api/order', checkAuth, orderRoute);
 
 require('./managers/CoinMgr')();
 

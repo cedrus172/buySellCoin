@@ -9,8 +9,8 @@ let closePrice = [];
 let openPrice = [];
 let lowPrice = [];
 let highPrice = [];
-
-let countDown = 20;
+const DEFAULT_COUNT_DOWN = 20;
+let countDown = DEFAULT_COUNT_DOWN;
 const updateCoin = () => {
     CoinModel.find({}, function(error, coins) {
         if (error) throw error;
@@ -59,13 +59,17 @@ const updateCoin = () => {
                         openPri = openPrice[`${code}`];
                     else if (closePrice[`${code}`])
                         openPri = closePrice[`${code}`];
+                    closePrice[coin.code] = coin.price;
                     let coinData = { name: coin.name, code: coin.code, open: openPri, low: lowPrice[coin.code], high: highPrice[coin.code], close: closePrice[coin.code], date: Math.floor(Date.now() / 1000) }
-                    priceController.insertNewPrice(coinData);
+                    if (coinData.open != 0) {
+                        priceController.insertNewPrice(coinData);
+                        global.io.emit(`rerender-${code}`, 'rerender');
+                    }
                     lowPrice[`${code}`] = 100000000000;
                     highPrice[`${code}`] = 0;
                     openPrice[`${code}`] = coin.price;
                 });
-                countDown = 10;
+                countDown = DEFAULT_COUNT_DOWN;
             }
             global.io.emit('priceList', listCoinPublish);
 

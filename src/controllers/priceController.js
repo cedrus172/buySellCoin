@@ -9,3 +9,11 @@ exports.insertNewPrice = function(price) {
         }
     })
 }
+
+exports.getPriceByCode = function(req, res) {
+    let code = req.params.code.toUpperCase();
+    PriceModel.find({ code: code }, (err, prices) => {
+        if (err) throw err;
+        prices ? res.send(prices) : res.json({ message: 'not found', ok: 'false' });
+    })
+}

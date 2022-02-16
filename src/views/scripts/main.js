@@ -61,6 +61,14 @@ socket.on('priceList', (priceList) => {
     priceList.forEach((price) => {
         let priceElement = $(`#price-${price.code}`);
         let oldPriceElement = $(`#oldPrice-${price.code}`);
+        if (isVisible($(`#priceOrder-${price.code}`))) {
+            $(`#priceOrder-${price.code}`).html(price.price.toFixed(2) + ' $');
+            if (price.lastTypeUpdate == 0) {
+                $(`#priceOrder-${price.code}`).addClass('text-danger').removeClass('text-success');
+            } else {
+                $(`#priceOrder-${price.code}`).addClass('text-success').removeClass('text-danger');
+            }
+        }
         if (isVisible(priceElement)) {
             priceElement.html(`<span class="text-${price.lastTypeUpdate == 0 ? 'danger' : 'success'} fw-bolder text-hover-primary d-block fs-6">${price.price.toFixed(2)}$</span>`);
             oldPriceElement.html(`<span class="text-${price.lastTypeUpdate == 0 ? 'danger' : 'success'} fw-bolder text-hover-primary d-block fs-6">${price.oldPrice.toFixed(2)}$</span>`);

@@ -29,5 +29,13 @@ const API = {
             headers: { 'Content-Type': 'application/json' }
 
         });
+    },
+
+    getPriceList: function(code) {
+        return $.ajax({
+            url: "/api/price/list/" + code,
+            method: "get",
+            headers: { 'Content-Type': 'application/json' }
+        });
     }
 }

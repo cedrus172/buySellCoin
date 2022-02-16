@@ -9,5 +9,4 @@ const userController = require('../controllers/userController');
 route.post('/register', upload.none(), userController.userRegister);
 route.post('/login', upload.none(), userController.userLogin);
 
-
 module.exports = route;

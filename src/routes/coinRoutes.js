@@ -13,4 +13,5 @@ route.post('/update', checkAdmin, coinController.updateCoinByCode);
 
 route.get('/list', coinController.getListCoin);
 
+
 module.exports = route;
