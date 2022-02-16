@@ -4,10 +4,14 @@ const app = express();
 const port = process.env.PORT || 3301;
 const bodyParser = require('body-parser');
 const userRoute = require('./routes/userRoutes');
-const apiRoute = require('./routes/apiRoutes');
+const singlePageRoute = require('./routes/singlePageRoute');
+const coinRoute = require('./routes/coinRoutes');
+const orderRoute = require('./routes/orderRoutes');
+
 const expressSession = require('express-session');
 
-const checkAuth = require('./middleware/auth.js');
+const checkAuth = require('./middleware/auth');
+const checkAdmin = require('./middleware/isadmin');
 
 const http = require('http');
 const sv = http.createServer(app);
@@ -18,9 +22,12 @@ const io = require('socket.io')(sv, {
     allowEIO3: true
 });
 
+
 require('./socketIO/handle')(io);
 
 global.loggedIn = null;
+global.io = io;
+global.full_url = 'http://127.0.0.1:' + port + '/';
 
 app.use(express.static(__dirname + '/views'));
 app.use(bodyParser.json());
@@ -45,14 +52,14 @@ app.get('/', checkAuth, (req, res) => {
     });
 });
 
-app.use('/user', userRoute);
+app.use('/user', singlePageRoute);
+app.use('/order', checkAuth, orderRoute);
 
-app.use('/api', apiRoute);
+app.use('/api/coin', coinRoute);
 
-function updatePriceListToClient(data) {
-    io.emit('priceList', data);
-}
-require('./managers/CoinMgr')(updatePriceListToClient);
+app.use('/api/user', userRoute);
+
+require('./managers/CoinMgr')();
 
 
 

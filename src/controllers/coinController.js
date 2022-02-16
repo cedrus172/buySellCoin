@@ -1,5 +1,6 @@
 const CoinModel = require('../model/Coin');
 
+
 exports.newCoin = function(req, res, next) {
     req.body.code = req.body.code.toUpperCase();
     CoinModel.findOne({ code: req.body.code }, function(error, coin) {
@@ -9,6 +10,7 @@ exports.newCoin = function(req, res, next) {
             CoinModel.create(req.body, (err, coin) => {
                 if (err) throw err;
                 if (coin) {
+                    global.io.emit('addCoin', coin);
                     res.send(coin);
                 } else {
                     res.json({ result: "Create failed " });
@@ -26,6 +28,21 @@ exports.getCoinByCode = function(req, res, next) {
             res.send(detailCoin);
         } else {
             res.json({ result: "Not found this code !" });
+        }
+    })
+}
+
+exports.deleteCoinByCode = function(req, res, next) {
+    const code = req.params.code.toUpperCase();
+    CoinModel.findOne({ code: code }, function(error, detailCoin) {
+        if (error) throw error;
+        if (detailCoin) {
+            CoinModel.deleteOne({ code: code }, function(error, result) {
+                global.io.emit('removeCoin', code);
+                res.send(result);
+            })
+        } else {
+            res.json({ result: "Not found code : " + code });
         }
     })
 }

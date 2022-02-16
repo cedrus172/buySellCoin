@@ -14,6 +14,10 @@ const CoinSchema = new Schema({
     lastTypeUpdate: {
         type: Number,
         default: 1
+    },
+    imgURL: {
+        type: String,
+        default: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1.png'
     }
 })
 

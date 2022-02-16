@@ -3,6 +3,7 @@
 <!--begin::Head-->
 
 <%- include('./layouts/header'); -%>
+    <title>Sign Up</title>
     <!--end::Head-->
     <!--begin::Body-->
 
@@ -22,7 +23,7 @@
                 <div class="d-flex flex-center flex-column flex-column-fluid p-10 pb-lg-20">
                     <!--begin::Logo-->
                     <a href="/" class="mb-12">
-                        <img alt="Logo" src="assets/media/logos/logo-default.svg" class="h-60px" />
+                        <img alt="Logo" src="<%=global.full_url%>assets/media/logos/logo-default.svg" class="h-60px" />
                     </a>
                     <!--end::Logo-->
                     <!--begin::Wrapper-->
@@ -36,13 +37,13 @@
                                 <!--end::Title-->
                                 <!--begin::Link-->
                                 <div class="text-gray-400 fw-bold fs-4">Already have an account?
-                                    <a href="/user/login" class="link-primary fw-bolder">Sign in here</a></div>
+                                    <a href="<%=global.full_url%>/user/login" class="link-primary fw-bolder">Sign in here</a></div>
                                 <!--end::Link-->
                             </div>
                             <!--end::Heading-->
                             <!--begin::Action-->
                             <button type="button" class="btn btn-flex flex-center btn-light-primary fw-bolder w-100 mb-10">
-							<img alt="Logo" src="assets/media/svg/brand-logos/google-icon.svg" class="h-20px me-3" />Sign in with Google</button>
+							<img alt="Logo" src="<%=global.full_url%>assets/media/svg/brand-logos/google-icon.svg" class="h-20px me-3" />Sign in with Google</button>
                             <!--end::Action-->
                             <!--begin::Separator-->
                             <div class="d-flex align-items-center mb-10">
@@ -121,7 +122,7 @@
         </div>
         <!--end::Main-->
         <%- include('./layouts/scripts') -%>
-            <script src="/scripts/register.js"></script>
+            <script src="<%=global.full_url%>/scripts/register.js"></script>
     </body>
     <!--end::Body-->
 
