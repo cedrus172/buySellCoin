@@ -1,5 +1,18 @@
 const UserModel = require('../model/User');
 const bcrypt = require('bcrypt');
+
+exports.getUserInfo = function(req, res, next) {
+    let userId = req.session.userId;
+    UserModel.findById(userId, function(err, user) {
+        if (err) throw err;
+        if (user) {
+            res.send(user);
+        } else {
+            res.json({ message: 'User not found' })
+        }
+    })
+}
+
 exports.userRegister = function(req, res, next) {
     req.body.username = req.body.username.toLowerCase();
     UserModel.findOne({ username: req.body.username }, function(err, user) {
@@ -39,7 +52,7 @@ exports.userLogin = function(req, res, next) {
                 }
             })
         } else {
-            res.json({ result: 'Login fail', type: -1 })
+            res.json({ message: 'Login fail', type: -1 })
         }
     })
 }
@@ -69,9 +82,7 @@ exports.addCoinToUser = function(id, code, amount) {
             } else if (!findCoin) {
                 let coins = user.coin;
                 coins.push({ code: code, amount: parseFloat(amount) });
-                UserModel.updateOne({ _id: id }, { coin: coins }, (err, user) => {
-                    console.log(user);
-                });
+                UserModel.updateOne({ _id: id }, { coin: coins }, (err, user) => {});
             } else {
                 let coins = user.coin;
                 coins.forEach((coin) => {
@@ -81,9 +92,7 @@ exports.addCoinToUser = function(id, code, amount) {
                     }
                 })
                 console.log(coins);
-                UserModel.updateOne({ _id: id }, { coin: coins }, (err, user) => {
-                    console.log(user);
-                });
+                UserModel.updateOne({ _id: id }, { coin: coins }, (err, user) => {});
             }
         } else {
             console.log('not found user');
@@ -91,15 +100,16 @@ exports.addCoinToUser = function(id, code, amount) {
     })
 }
 
-exports.removeCoinFromUser = function(id, code, amount) {
+exports.updateCoinFromUser = function(id, code, amount) {
     UserModel.findById(id, (err, user) => {
         if (err) throw err;
         if (user) {
             let coins = user.coin;
-            let amountCoin = parseFloat(coins.find(a => a.code == code).amount);
-            let coinAfter = parseFloat(amountCoin - amount);
-            coins.find(a => a.code == code).amount = coinAfter;
-            UserModel.updateOne({ _id: id }, { coin: coins });
+            coins.find(a => a.code == code).amount = amount;
+            UserModel.updateOne({ _id: id }, { coin: coins }, (err, user) => {
+                if (err) throw err;
+                console.log(user);
+            });
         } else {
             console.log('not found user');
         }

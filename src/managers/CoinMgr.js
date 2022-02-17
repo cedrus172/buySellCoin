@@ -36,10 +36,13 @@ const updateCoin = () => {
 
                 let name = coin.name;
                 let currentPrice = coin.price;
-                let random = Math.floor(Math.random() * 10);
+                let random = Math.floor(Math.random() * 3);
                 let imgURL = coin.imgURL;
                 let type = Math.floor(Math.random() * 100) < 50 ? 0 : 1;
                 let newPrice = type === 0 ? currentPrice - random : currentPrice + random;
+                if (newPrice < 0) {
+                    newPrice = 20.12;
+                }
                 if (newPrice < lowPrice[`${code}`])
                     lowPrice[`${code}`] = newPrice;
                 if (newPrice > highPrice[`${code}`])
@@ -60,7 +63,7 @@ const updateCoin = () => {
                     else if (closePrice[`${code}`])
                         openPri = closePrice[`${code}`];
                     closePrice[coin.code] = coin.price;
-                    let coinData = { name: coin.name, code: coin.code, open: openPri, low: lowPrice[coin.code], high: highPrice[coin.code], close: closePrice[coin.code], date: Math.floor(Date.now() / 1000) }
+                    let coinData = { name: coin.name, code: coin.code, open: openPri, low: lowPrice[coin.code], high: highPrice[coin.code], close: closePrice[coin.code], date: Date.now() }
                     if (coinData.open != 0) {
                         priceController.insertNewPrice(coinData);
                         global.io.emit(`rerender-${code}`, 'rerender');

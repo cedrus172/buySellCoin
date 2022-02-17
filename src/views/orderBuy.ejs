@@ -89,7 +89,7 @@
                                             <!--begin::Body-->
                                             <div class="card-body py-3">
                                                 <!--begin::Table container-->
-                                                <div id="containerChart" style="height: 600px; min-width: 100%"></div>
+                                                <div id="containerChart" style="height: 400px; min-width: 100%"></div>
 
                                                 <!--end::Table container-->
                                             </div>
@@ -133,8 +133,8 @@
                                                 <!--end::Input group-->
 
                                                 <div class="mb-7">
-                                                    <button class="btn btn-success w-100">
-                                                        Buy <%=code%>
+                                                    <button id="buyBtn" class="btn btn-success w-100">
+                                                        BUY <%=code%>
                                                     </button>
                                                 </div>
                                                 <!--end::Table container-->
@@ -146,7 +146,57 @@
                                     <!--end::Col-->
                                 </div>
                                 <!--end::Row-->
+                                <!--begin::Row-->
+                                <div class="row gy-5 g-xl-8">
+                                    <!--begin::Col-->
+                                    <div class="col-xl-12">
+                                        <!--begin::Tables Widget 3-->
+                                        <div class="card card-xl-stretch mb-5 mb-xl-8">
+                                            <!--begin::Header-->
+                                            <div class="card-header border-0 pt-5">
+                                                <h3 class="card-title align-items-start flex-column">
+                                                    <span class="card-label fw-bolder fs-3 mb-1">Histories</span>
+                                                </h3>
 
+                                            </div>
+                                            <!--end::Header-->
+                                            <!--begin::Body-->
+                                            <div class="card-body py-3">
+                                                <!--begin::Table container-->
+                                                <div class="table-responsive">
+                                                    <!--begin::Table-->
+                                                    <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
+                                                        <!--begin::Table head-->
+                                                        <thead>
+                                                            <tr class="fw-bolder text-muted">
+                                                                <th class="w-25px">
+                                                                    #
+                                                                </th>
+                                                                <th class="min-w-150px">Coin Name</th>
+                                                                <th class="min-w-120px">Amount</th>
+                                                                <th class="min-w-120px">Total</th>
+                                                                <th class="min-w-140px">Time Buy</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <!--end::Table head-->
+                                                        <!--begin::Table body-->
+                                                        <tbody id="tableHistories">
+
+                                                        </tbody>
+                                                        <!--end::Table body-->
+                                                    </table>
+                                                    <!--end::Table-->
+                                                </div>
+                                                <!--end::Table container-->
+                                            </div>
+                                            <!--begin::Body-->
+                                        </div>
+                                        <!--end::Tables Widget 3-->
+                                    </div>
+                                    <!--end::Col-->
+
+                                </div>
+                                <!--end::Row-->
                             </div>
                             <!--end::Container-->
                         </div>
@@ -170,7 +220,10 @@
     </body>
     <script src="<%=global.full_url%>scripts/chart.js">
     </script>
+    <script script src="<%=global.full_url%>scripts/order.js">
+    </script>
     <script>
+        const COIN = '<%=code%>';
         renderChartByCode('<%=code%>');
         socket.on('rerender-<%=code%>', (data) => {
             renderChartByCode('<%=code%>');
@@ -185,7 +238,9 @@
 
         $('#amount').change(() => {
             calculateTotal();
-        })
+        });
+
+        getHistories('BUY');
     </script>
     <!--end::Body-->
 

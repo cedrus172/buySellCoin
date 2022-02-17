@@ -22,6 +22,8 @@ exports.buyCoin = function(req, res, next) {
                         userController.updateUsdUser({ id: req.session.userId, usd: moneyAfter });
                         userController.addCoinToUser(req.session.userId, code, amount);
                         coinController.updateCoinByCode2({ code: code, price: priceCoinAfter })
+                        addOrder(req.session.userId, 'BUY', code, amount, total);
+                        global.io.to(req.session.userId).emit('refreshHavingCoin', '');
                         res.json({ message: 'Buy success', type: 1, priceCoinAfter: priceCoinAfter, usdAfter: moneyAfter });
                     } else {
                         res.json({ message: 'Not enough balance to buy', type: -2 })
@@ -53,12 +55,15 @@ exports.sellCoin = function(req, res, next) {
                         if (coinAmount >= amount) {
                             let usdUser = parseFloat(parseFloat(user.usd).toFixed(2));
                             let usdAfter = usdUser + total;
-                            userController.removeCoinFromUser(req.session.userId, code, amount);
+                            let coinAfter = parseFloat(coinAmount - amount);
+
+                            userController.updateCoinFromUser(req.session.userId, code, coinAfter);
                             userController.updateUsdUser({ id: req.session.userId, usd: usdAfter });
                             let priceCoinAfter = price - total / 100;
                             coinController.updateCoinByCode2({ code: code, price: priceCoinAfter })
-                            res.json({ message: 'Sell success', type: 1, usdReward: total, priceCoinAfter: priceCoinAfter });
-
+                            addOrder(req.session.userId, 'SELL', code, amount, total);
+                            global.io.to(req.session.userId).emit('refreshHavingCoin', '');
+                            res.json({ message: 'Sell success', type: 1, usdAfter: usdAfter, coinAfter: coinAfter });
                         } else {
                             res.json({ message: 'Not have enough coin to sell', type: -11 });
                         }
@@ -72,5 +77,35 @@ exports.sellCoin = function(req, res, next) {
         } else {
             res.json({ message: 'error', type: -1 });
         }
+    })
+}
+
+exports.getOrdersBuyByCode = function(req, res, next) {
+    let code = req.params.code.toUpperCase();
+    OrderModel.find({ userId: req.session.userId, type: 'BUY', code: code }, function(err, orders) {
+        if (err) throw err;
+        if (orders) {
+            res.send(orders);
+        } else {
+            res.json({});
+        }
+    })
+}
+
+exports.getOrdersSellByCode = function(req, res, next) {
+    let code = req.params.code.toUpperCase();
+    OrderModel.find({ userId: req.session.userId, type: 'SELL', code: code }, function(err, orders) {
+        if (err) throw err;
+        if (orders) {
+            res.send(orders);
+        } else {
+            res.json({});
+        }
+    })
+}
+
+function addOrder(userId, type, code, amount, total) {
+    OrderModel.create({ userId: userId, type: type, code: code, amount: amount, total: total }, (err, order) => {
+        console.log(order);
     })
 }

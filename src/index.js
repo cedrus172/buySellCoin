@@ -8,6 +8,7 @@ const singlePageRoute = require('./routes/singlePageRoute');
 const coinRoute = require('./routes/coinRoutes');
 const orderRoute = require('./routes/orderRoutes');
 const priceRoute = require('./routes/priceRoutes');
+const adminRoute = require('./routes/adminRoutes');
 const expressSession = require('express-session');
 
 const checkAuth = require('./middleware/auth');
@@ -43,11 +44,12 @@ app.use('*', (req, res, next) => {
 })
 
 app.set('view engine', "ejs");
-app.set('views', "./views");
+app.set('views', "./src/views");
 
 app.get('/', checkAuth, (req, res) => {
     res.render('index', {
         username: req.session.username,
+        userid: req.session.userId,
         levelStaff: req.session.levelStaff
     });
 });
@@ -58,6 +60,7 @@ app.use('/api/coin', coinRoute);
 app.use('/api/user', userRoute);
 app.use('/api/price', checkAuth, priceRoute);
 app.use('/api/order', checkAuth, orderRoute);
+app.use('/admin', checkAdmin, adminRoute);
 
 require('./managers/CoinMgr')();
 

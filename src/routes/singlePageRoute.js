@@ -19,6 +19,7 @@ route.get('/login', (req, res) => {
         res.redirect("/");
 });
 
+
 route.get('/logout', userController.userLogout);
 
 module.exports = route;

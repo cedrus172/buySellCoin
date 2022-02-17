@@ -1,7 +1,7 @@
 const API = {
     register: function(username, password) {
         return $.ajax({
-            url: "/api/user/register",
+            url: full_url + "api/user/register",
             method: "post",
             headers: { 'Content-Type': 'application/json' },
             data: JSON.stringify({
@@ -12,7 +12,7 @@ const API = {
     },
     login: function(username, password) {
         return $.ajax({
-            url: "/api/user/login",
+            url: full_url + "api/user/login",
             method: "post",
             headers: { 'Content-Type': 'application/json' },
             data: JSON.stringify({
@@ -24,7 +24,7 @@ const API = {
 
     getCoinList: function() {
         return $.ajax({
-            url: "/api/coin/list",
+            url: full_url + "api/coin/list",
             method: "get",
             headers: { 'Content-Type': 'application/json' }
 
@@ -33,7 +33,69 @@ const API = {
 
     getPriceList: function(code) {
         return $.ajax({
-            url: "/api/price/list/" + code,
+            url: full_url + "api/price/list/" + code,
+            method: "get",
+            headers: { 'Content-Type': 'application/json' }
+        });
+    },
+
+    buyCoin: function(amount, code) {
+        return $.ajax({
+            url: full_url + "api/order/buy",
+            method: "post",
+            headers: { 'Content-Type': 'application/json' },
+            data: JSON.stringify({
+                code: code,
+                amount: amount
+            })
+        });
+    },
+
+    sellCoin: function(amount, code) {
+        return $.ajax({
+            url: full_url + "api/order/sell",
+            method: "post",
+            headers: { 'Content-Type': 'application/json' },
+            data: JSON.stringify({
+                code: code,
+                amount: amount
+            })
+        });
+    },
+
+    getProfile: function() {
+        return $.ajax({
+            url: full_url + "api/user/profile",
+            method: "get",
+            headers: { 'Content-Type': 'application/json' }
+        });
+    },
+
+    getHistoriesByCode: function(type, code) {
+        return $.ajax({
+            url: `${full_url}api/order/list/${type}/${code}`,
+            method: "get",
+            headers: { 'Content-Type': 'application/json' }
+        });
+    },
+
+    addCoin: function(name, code, price, picture) {
+        return $.ajax({
+            url: full_url + "api/coin/new",
+            method: "post",
+            headers: { 'Content-Type': 'application/json' },
+            data: JSON.stringify({
+                name: name,
+                code: code,
+                price: parseFloat(price),
+                imgURL: picture
+            })
+        });
+    },
+
+    deleteCoin: function(code) {
+        return $.ajax({
+            url: full_url + "api/coin/delete/" + code,
             method: "get",
             headers: { 'Content-Type': 'application/json' }
         });

@@ -4,7 +4,13 @@ function handleSocket(io) {
         socket.on('disconnect', () => {
             console.log('user disconnected');
         });
+        socket.on('userConnect', (userId) => {
+            console.log(`userId : ${userId} connected`);
+            socket.join(userId);
+        })
     });
+
+
 }
 
 module.exports = handleSocket;

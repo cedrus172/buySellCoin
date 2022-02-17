@@ -33,3 +33,14 @@ const setDisable = (param, enable) => {
     else
         param.removeAttr('disabled');
 }
+
+const setActiveMenu = (name) => {
+    let listMenu = document.querySelectorAll('.menu-item.mb-1 .menu-link');
+    listMenu.forEach((menu) => {
+        if (menu.dataset.menu == name) {
+            menu.classList.add('active');
+        } else {
+            menu.classList.remove('active');
+        }
+    })
+}

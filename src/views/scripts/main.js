@@ -5,6 +5,7 @@ const showCoinList = async() => {
         data.oldPrice = data.price;
     })
     tableCoinList.renderData(result);
+    setHavingCoin();
 }
 let num = 0;
 const titlePage = $('#titlePage');
@@ -33,6 +34,7 @@ const tableCoinList = {
         </td>
         <td id="price-${code}"><span class="text-${lastUpdate == 0 ? 'danger' : 'success'} fw-bolder text-hover-primary d-block fs-6">${price.toFixed(2)}</span></td>$</span></td>
         <td id="oldPrice-${code}"><span class="text-${lastUpdate == 0 ? 'danger' : 'success'} fw-bolder text-hover-primary d-block fs-6">${parseFloat(oldPrice).toFixed(2)}$</span></td>
+        <td><span class="text-primary fw-bolder text-hover-primary d-block fs-6" id="having-${code}">0</span></td>
         <td><div class="d-flex justify-content-end flex-shrink-0">
         <a href="/order/buy/${code}" class="btn btn-sm btn-success me-2">BUY</a>
         <a href="/order/sell/${code}" class="btn btn-sm btn-danger me-2">SELL</a>
@@ -54,8 +56,19 @@ const tableCoinList = {
     removeRow: function(code) {
         let row = $(`#row-${code}`);
         row.remove();
+    },
+    setHaving: function(code, amount) {
+        $(`#having-${code}`).html(amount);
     }
 }
+
+const setHavingCoin = async() => {
+    let result = await API.getProfile();
+    result.coin.forEach((coinBalance) => {
+        tableCoinList.setHaving(coinBalance.code, coinBalance.amount.toFixed(2));
+    })
+}
+
 const socket = io();
 socket.on('priceList', (priceList) => {
     priceList.forEach((price) => {
@@ -80,7 +93,10 @@ socket.on('addCoin', (coin) => {
     num++;
     tableCoinList.addRow(coin.code, coin.name, parseFloat(coin.price.$numberDecimal), coin.lastTypeUpdate, 'no', coin.imgURL, parseFloat(coin.price.$numberDecimal), num);
 });
+
 socket.on('removeCoin', (code) => {
     tableCoinList.removeRow(code);
-})
+});
+
+
 showCoinList();

@@ -1,13 +1,14 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const OrderSchema = new Schema({
+    userId: String,
     type: String,
     code: String,
     amount: String,
     total: String,
     date: {
-        type: String,
-        default: Math.floor(Date.now() / 1000)
+        type: Date,
+        default: new Date()
     }
 })
 

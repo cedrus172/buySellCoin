@@ -5,7 +5,8 @@ module.exports = (req, res, next) => {
         if (err) throw err;
         if (user)
             user.levelstaff > 0 ? next() : res.json({ message: 'not have permission', type: '-3' });
-        else
+        else {
             res.json({ message: 'not have permission', type: '-3' });
+        }
     })
 }

@@ -5,15 +5,15 @@ exports.newCoin = function(req, res, next) {
     req.body.code = req.body.code.toUpperCase();
     CoinModel.findOne({ code: req.body.code }, function(error, coin) {
         if (coin) {
-            res.json({ result: "Mã code coin của bạn đã tồn tại , vui lòng chọn mã khác", type: -12 });
+            res.json({ message: "Your coin code already exists, please choose another code", type: -12 });
         } else {
             CoinModel.create(req.body, (err, coin) => {
                 if (err) throw err;
                 if (coin) {
                     global.io.emit('addCoin', coin);
-                    res.send(coin);
+                    res.json({ message: 'Add coin success', type: 1 })
                 } else {
-                    res.json({ result: "Create failed " });
+                    res.json({ message: "Create failed ", type: -11 });
                 }
             })
         }
@@ -39,10 +39,10 @@ exports.deleteCoinByCode = function(req, res, next) {
         if (detailCoin) {
             CoinModel.deleteOne({ code: code }, function(error, result) {
                 global.io.emit('removeCoin', code);
-                res.send(result);
+                res.json({ message: 'Deleted', type: 1 })
             })
         } else {
-            res.json({ result: "Not found code : " + code });
+            res.json({ message: "Not found code : " + code, type: -1 });
         }
     })
 }

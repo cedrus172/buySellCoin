@@ -24,8 +24,8 @@
                                 <div class="page-title d-flex flex-column align-items-start justify-content-center flex-wrap me-lg-2 pb-5 pb-lg-0" data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', lg: '#kt_header_container'}">
                                     <!--begin::Heading-->
                                     <h1 class="text-dark fw-bold my-0 fs-2" id="titlePage">
-                                        <%=type%>
-                                            <%=code%>
+                                        Sell
+                                        <%=code%>
                                     </h1>
                                     <!--end::Heading-->
                                     <!--begin::Breadcrumb-->
@@ -34,8 +34,8 @@
                                             <a href="/" class="text-muted">Home</a>
                                         </li>
                                         <li class="breadcrumb-item text-dark">
-                                            <%=type%>
-                                                <%=code%>
+                                            Sell
+                                            <%=code%>
                                         </li>
                                     </ul>
                                     <!--end::Breadcrumb-->
@@ -89,7 +89,7 @@
                                             <!--begin::Body-->
                                             <div class="card-body py-3">
                                                 <!--begin::Table container-->
-                                                <div id="containerChart" style="height: 600px; min-width: 100%"></div>
+                                                <div id="containerChart" style="height: 400px; min-width: 100%"></div>
 
                                                 <!--end::Table container-->
                                             </div>
@@ -105,7 +105,7 @@
                                             <!--begin::Header-->
                                             <div class="card-header border-0 pt-5">
                                                 <h3 class="card-title align-items-start flex-column">
-                                                    <span class="card-label fw-bolder fs-3 mb-1"><%=type%> <%=code%> - PRICE : <span id="priceOrder-<%=code%>"></span> </span>
+                                                    <span class="card-label fw-bolder fs-3 mb-1">SELL <%=code%> - PRICE : <span id="priceOrder-<%=code%>"></span></span>
                                                 </h3>
 
                                             </div>
@@ -117,21 +117,28 @@
                                                 <div class="mb-7">
                                                     <span class="badge badge-warning" id="yourBalance">Your USD : <%=usd%> $</span>
                                                 </div>
-
+                                                <div class="mb-7">
+                                                    <span class="badge badge-success" id="coinBalance">Your <%=code%> : <%=coinBalance%></span>
+                                                </div>
                                                 <!--begin::Input group-->
                                                 <div class="form-floating mb-7">
-                                                    <input type="number" class="form-control" id="amount" placeholder="Amount (<%= type == 'SELL' ? 'USD' : code %>)" />
-                                                    <label for="amount">Amount (<%= type == 'SELL' ? 'USD' : code %>)</label>
+                                                    <input type="number" class="form-control" id="amount" placeholder="Amount (<%=code%>)" />
+                                                    <label for="amount">Amount (<%=code%>)</label>
                                                 </div>
                                                 <!--end::Input group-->
 
                                                 <!--begin::Input group-->
                                                 <div class="form-floating mb-7">
-                                                    <input type="number" class="form-control" id="total" placeholder="Total (<%= type == 'BUY' ? 'USD' : code %>)" />
-                                                    <label for="total">Total (<%= type == 'BUY' ? 'USD' : code %>)</label>
+                                                    <input type="number" class="form-control" id="total" placeholder="Total (USD)" readonly disabled />
+                                                    <label for="total">Total (USD)</label>
                                                 </div>
                                                 <!--end::Input group-->
 
+                                                <div class="mb-7">
+                                                    <button id="sellBtn" class="btn btn-danger w-100">
+                                                        SELL <%=code%>
+                                                    </button>
+                                                </div>
                                                 <!--end::Table container-->
                                             </div>
                                             <!--begin::Body-->
@@ -141,7 +148,57 @@
                                     <!--end::Col-->
                                 </div>
                                 <!--end::Row-->
+                                <!--begin::Row-->
+                                <div class="row gy-5 g-xl-8">
+                                    <!--begin::Col-->
+                                    <div class="col-xl-12">
+                                        <!--begin::Tables Widget 3-->
+                                        <div class="card card-xl-stretch mb-5 mb-xl-8">
+                                            <!--begin::Header-->
+                                            <div class="card-header border-0 pt-5">
+                                                <h3 class="card-title align-items-start flex-column">
+                                                    <span class="card-label fw-bolder fs-3 mb-1">Histories</span>
+                                                </h3>
 
+                                            </div>
+                                            <!--end::Header-->
+                                            <!--begin::Body-->
+                                            <div class="card-body py-3">
+                                                <!--begin::Table container-->
+                                                <div class="table-responsive">
+                                                    <!--begin::Table-->
+                                                    <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
+                                                        <!--begin::Table head-->
+                                                        <thead>
+                                                            <tr class="fw-bolder text-muted">
+                                                                <th class="w-25px">
+                                                                    #
+                                                                </th>
+                                                                <th class="min-w-150px">Coin Name</th>
+                                                                <th class="min-w-120px">Amount</th>
+                                                                <th class="min-w-120px">Total</th>
+                                                                <th class="min-w-140px">Time Sell</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <!--end::Table head-->
+                                                        <!--begin::Table body-->
+                                                        <tbody id="tableHistories">
+
+                                                        </tbody>
+                                                        <!--end::Table body-->
+                                                    </table>
+                                                    <!--end::Table-->
+                                                </div>
+                                                <!--end::Table container-->
+                                            </div>
+                                            <!--begin::Body-->
+                                        </div>
+                                        <!--end::Tables Widget 3-->
+                                    </div>
+                                    <!--end::Col-->
+
+                                </div>
+                                <!--end::Row-->
                             </div>
                             <!--end::Container-->
                         </div>
@@ -165,11 +222,27 @@
     </body>
     <script src="<%=global.full_url%>scripts/chart.js">
     </script>
+    <script script src="<%=global.full_url%>scripts/order.js">
+    </script>
     <script>
+        const COIN = '<%=code%>';
         renderChartByCode('<%=code%>');
         socket.on('rerender-<%=code%>', (data) => {
             renderChartByCode('<%=code%>');
-        })
+        });
+        let priceCoin = $('#priceOrder-<%=code%>');
+        let totalElement = $('#total');
+
+        function calculateTotal() {
+            let price = parseFloat(priceCoin.html().replace(' $', ''));
+            totalElement.val(price);
+        }
+
+        $('#amount').change(() => {
+            calculateTotal();
+        });
+
+        getHistories('SELL');
     </script>
     <!--end::Body-->
 
