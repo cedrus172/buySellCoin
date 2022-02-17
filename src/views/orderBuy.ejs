@@ -232,7 +232,7 @@
         let totalElement = $('#total');
 
         function calculateTotal() {
-            let price = parseFloat(priceCoin.html().replace(' $', ''));
+            let price = parseFloat(priceCoin.html().replace(' $', '')) * parseFloat($('#amount').val());
             totalElement.val(price);
         }
 
