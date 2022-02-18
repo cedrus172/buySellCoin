@@ -16,13 +16,14 @@ route.get('/list', coinController.getListCoin);
 route.get('/price/:code', async(req, res) => {
     let code = req.params.code.toUpperCase();
     let coinPrice = await coinController.getPriceBySymbol(code)
-    if (coinPrice == 0) {
-        res.json({ message: 'Coin not found', type: -1 })
-    } else if (coinPrice.data) {
-        if (coinPrice.data.symbol) {
-            res.json({ message: 'OK', price: coinPrice.data.price, type: 1 });
+    if (coinPrice.data.Response == 'Error') {
+        res.json({ message: coinPrice.data.Message, type: -1 })
+    } else if (coinPrice.data.RAW) {
+        let infoCoin = coinPrice.data.RAW[code]['USD'];
+        if (infoCoin.PRICE) {
+            res.json({ message: 'OK', price: infoCoin.PRICE, imgURL: 'https://cryptocompare.com' + infoCoin.IMAGEURL, type: 1 });
         } else {
-            res.json({ message: coinPrice.data.msg, type: -1 })
+            res.json({ message: 'error', type: -1 })
         }
     }
 })

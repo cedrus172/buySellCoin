@@ -8,25 +8,22 @@ exports.newCoin = async function(req, res, next) {
             res.json({ message: "Your coin code already exists, please choose another code", type: -12 });
         } else {
             let coinPrice = await exports.getPriceBySymbol(req.body.code);
-            console.log(coinPrice);
-            if (coinPrice.data) {
-                req.body.price = coinPrice.data.price;
-                CoinModel.create(req.body, (err, coin) => {
+            if (coinPrice.data.Response == 'Error') {
+                res.json({ message: coinPrice.data.Message, type: -1 })
+            } else {
+                let infoCoin = coinPrice.data.RAW[req.body.code]['USD'];
+                let infoInsert = { name: req.body.name, code: req.body.code, price: infoCoin.PRICE, imgURL: 'https://cryptocompare.com' + infoCoin.IMAGEURL }
+                CoinModel.create(infoInsert, (err, coin) => {
                     if (err) throw err;
                     if (coin) {
                         global.io.emit('addCoin', coin);
-                        res.json({ message: 'Add coin success . Coin Price : ' + parseFloat(coinPrice.data.price).toFixed(2), type: 1 })
+                        res.json({ message: 'Add coin success . Coin Price : ' + infoCoin.PRICE, type: 1 })
                     } else {
                         res.json({ message: "Create failed ", type: -11 });
                     }
                 })
-            } else {
-                if (coinPrice == 0) {
-                    res.json({ message: 'Error', type: -1 });
-                } else {
-                    res.json({ message: coinPrice.data.msg, type: coinPrice.data.code })
-                }
             }
+
 
         }
     });
@@ -34,7 +31,7 @@ exports.newCoin = async function(req, res, next) {
 
 exports.getPriceBySymbol = async(coin) => {
     try {
-        let result = await axios.get(`https://api.binance.com/api/v3/ticker/price?symbol=${coin.toUpperCase()}USDT`);
+        let result = await axios.get(`https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${coin.toUpperCase()}&tsyms=USD`);
         return await result;
     } catch (error) {
         return 0.0;

@@ -1,7 +1,7 @@
 const showCoinList = async() => {
     let result = await API.getCoinList();
     result.forEach(data => {
-        data.price = data.price.$numberDecimal;
+        data.price = data.price;
         data.oldPrice = data.price;
     })
     tableCoinList.renderData(result);
@@ -91,7 +91,7 @@ socket.on('priceList', (priceList) => {
 });
 socket.on('addCoin', (coin) => {
     num++;
-    tableCoinList.addRow(coin.code, coin.name, parseFloat(coin.price.$numberDecimal), coin.lastTypeUpdate, 'no', coin.imgURL, parseFloat(coin.price.$numberDecimal), num);
+    tableCoinList.addRow(coin.code, coin.name, coin.price, coin.lastTypeUpdate, 'no', coin.imgURL, coin.price, num);
 });
 
 socket.on('removeCoin', (code) => {

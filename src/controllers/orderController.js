@@ -53,7 +53,7 @@ exports.sellCoin = function(req, res, next) {
                     if (coin) {
                         let coinAmount = parseFloat(coin.amount);
                         if (coinAmount >= amount) {
-                            let usdUser = parseFloat(parseFloat(user.usd).toFixed(2));
+                            let usdUser = parseFloat(user.usd).toFixed(2);
                             let usdAfter = usdUser + total;
                             let coinAfter = parseFloat(coinAmount - amount);
 
@@ -105,7 +105,5 @@ exports.getOrdersSellByCode = function(req, res, next) {
 }
 
 function addOrder(userId, type, code, amount, total) {
-    OrderModel.create({ userId: userId, type: type, code: code, amount: amount, total: total }, (err, order) => {
-        console.log(order);
-    })
+    OrderModel.create({ userId: userId, type: type, code: code, amount: amount, total: total }, (err, order) => {})
 }

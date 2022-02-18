@@ -9,7 +9,7 @@ const saltRounds = 10;
 const UserSchema = new Schema({
     username: String,
     password: String,
-    usd: mongoose.SchemaTypes.Decimal128,
+    usd: Number,
     levelstaff: Number,
     coin: {
         type: Array,

@@ -79,16 +79,14 @@ const API = {
         });
     },
 
-    addCoin: function(name, code, price, picture) {
+    addCoin: function(name, code) {
         return $.ajax({
             url: full_url + "api/coin/new",
             method: "post",
             headers: { 'Content-Type': 'application/json' },
             data: JSON.stringify({
                 name: name,
-                code: code,
-                price: parseFloat(price),
-                imgURL: picture
+                code: code
             })
         });
     },
@@ -96,6 +94,14 @@ const API = {
     deleteCoin: function(code) {
         return $.ajax({
             url: full_url + "api/coin/delete/" + code,
+            method: "get",
+            headers: { 'Content-Type': 'application/json' }
+        });
+    },
+
+    getPriceCoin: function(code) {
+        return $.ajax({
+            url: full_url + "api/coin/price/" + code,
             method: "get",
             headers: { 'Content-Type': 'application/json' }
         });

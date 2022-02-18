@@ -29,6 +29,8 @@ const updateCoin = () => {
             await listCoin.forEachAsync(async(coin) => {
                 let code = coin.code;
                 let coinInfo = await coinController.getPriceBySymbol(code);
+                coinInfo = coinInfo.data.RAW[code]['USD'];
+
                 if (!lowPrice[`${code}`])
                     lowPrice[`${code}`] = 100000000000;
                 if (!highPrice[`${code}`])
@@ -37,7 +39,7 @@ const updateCoin = () => {
                 let name = coin.name;
                 let currentPrice = coin.price;
                 let imgURL = coin.imgURL;
-                let newPrice = parseFloat(coinInfo.data.price);
+                let newPrice = parseFloat(coinInfo.PRICE);
                 if (newPrice < lowPrice[`${code}`])
                     lowPrice[`${code}`] = newPrice;
                 if (newPrice > highPrice[`${code}`])

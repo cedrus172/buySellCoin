@@ -5,7 +5,7 @@ const CoinSchema = new Schema({
     name: String,
     code: String,
     price: {
-        type: SchemaTypes.Decimal128
+        type: Number,
     },
     createDate: { /* can declare property type with an object like this because we need 'default' */
         type: Date,
