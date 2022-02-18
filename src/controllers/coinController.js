@@ -17,6 +17,7 @@ exports.newCoin = async function(req, res, next) {
                     if (err) throw err;
                     if (coin) {
                         global.io.emit('addCoin', coin);
+                        global.io.emit('notice', { type: "success", msg: `Admin just added new coin ${coin.name} : ${infoCoin.PRICE}` })
                         res.json({ message: 'Add coin success . Coin Price : ' + infoCoin.PRICE, type: 1 })
                     } else {
                         res.json({ message: "Create failed ", type: -11 });
@@ -57,6 +58,7 @@ exports.deleteCoinByCode = function(req, res, next) {
         if (detailCoin) {
             CoinModel.deleteOne({ code: code }, function(error, result) {
                 global.io.emit('removeCoin', code);
+                global.io.emit('notice', { type: "error", msg: `Admin just deleted a coin ${detailCoin.name} : ${infoCoin.PRICE}` })
                 res.json({ message: 'Deleted', type: 1 })
             })
         } else {

@@ -64,6 +64,7 @@ const tableCoinList = {
 
 const setHavingCoin = async() => {
     let result = await API.getProfile();
+    $('#myUsd').html(`Your USD : ${result.usd} $`);
     result.coin.forEach((coinBalance) => {
         tableCoinList.setHaving(coinBalance.code, coinBalance.amount.toFixed(2));
     })
@@ -98,5 +99,16 @@ socket.on('removeCoin', (code) => {
     tableCoinList.removeRow(code);
 });
 
+socket.on('notice', (data) => {
+    let type = data.type;
+    let msg = data.msg;
+    if (type == "error")
+        toastr.error(msg);
+    else if (type == "warning")
+        toastr.warning(msg);
+    else {
+        toastr.success(msg);
+    }
+})
 
 showCoinList();
