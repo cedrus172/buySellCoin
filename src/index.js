@@ -1,7 +1,14 @@
 require('./config/db.config');
+
+global.loggedIn = null;
+
 const express = require('express');
 const app = express();
+
+
 const port = process.env.PORT || 3301;
+global.full_url = 'http://localhost:' + port + '/';
+
 const bodyParser = require('body-parser');
 const userRoute = require('./routes/userRoutes');
 const singlePageRoute = require('./routes/singlePageRoute');
@@ -10,25 +17,6 @@ const orderRoute = require('./routes/orderRoutes');
 const priceRoute = require('./routes/priceRoutes');
 const adminRoute = require('./routes/adminRoutes');
 const expressSession = require('express-session');
-
-const checkAuth = require('./middleware/auth');
-const checkAdmin = require('./middleware/isadmin');
-
-const http = require('http');
-const sv = http.createServer(app);
-const io = require('socket.io')(sv, {
-    cors: {
-        origin: '*',
-    },
-    allowEIO3: true
-});
-
-
-require('./socketIO/handle')(io);
-
-global.loggedIn = null;
-global.io = io;
-global.full_url = 'http://127.0.0.1:' + port + '/';
 
 app.use(express.static(__dirname + '/views'));
 app.use(bodyParser.json());
@@ -46,6 +34,25 @@ app.use('*', (req, res, next) => {
 app.set('view engine', "ejs");
 app.set('views', "./src/views");
 
+
+const checkAuth = require('./middleware/auth');
+const checkAdmin = require('./middleware/isadmin');
+
+const http = require('http');
+const sv = http.createServer(app);
+const io = require('socket.io')(sv, {
+    cors: {
+        origin: '*',
+    },
+    allowEIO3: true
+});
+
+
+require('./socketIO/handle')(io);
+global.io = io;
+
+
+
 app.get('/', checkAuth, (req, res) => {
     res.render('index', {
         username: req.session.username,
@@ -61,7 +68,6 @@ app.use('/api/user', userRoute);
 app.use('/api/price', checkAuth, priceRoute);
 app.use('/api/order', checkAuth, orderRoute);
 app.use('/admin', checkAdmin, adminRoute);
-
 require('./managers/CoinMgr')();
 
 

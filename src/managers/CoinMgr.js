@@ -2,22 +2,22 @@ const coinController = require('../controllers/coinController');
 const CoinModel = require('../model/Coin');
 const priceController = require('../controllers/priceController');
 
-let listCoin = [];
-let listCoinPublish = [];
-
 let closePrice = [];
 let openPrice = [];
 let lowPrice = [];
 let highPrice = [];
 const DEFAULT_COUNT_DOWN = 20;
 let countDown = DEFAULT_COUNT_DOWN;
+Array.prototype.forEachAsync = async function(fn) {
+    for (let t of this) { await fn(t) }
+}
 const updateCoin = () => {
-    CoinModel.find({}, function(error, coins) {
+    CoinModel.find({}, async function(error, coins) {
         if (error) throw error;
         if (coins) {
             countDown--;
-            listCoin = [];
-            listCoinPublish = [];
+            let listCoin = [];
+            let listCoinPublish = [];
             coins.forEach((coin) => {
                 let code = coin.code;
                 let name = coin.name;
@@ -26,9 +26,9 @@ const updateCoin = () => {
                 let imgURL = coin.imgURL;
                 listCoin.push({ code: code, name: name, price: parseFloat(price), lastTypeUpdate: lastTypeUpdate, imgURL: imgURL });
             })
-            listCoin.forEach((coin) => {
+            await listCoin.forEachAsync(async(coin) => {
                 let code = coin.code;
-
+                let coinInfo = await coinController.getPriceBySymbol(code);
                 if (!lowPrice[`${code}`])
                     lowPrice[`${code}`] = 100000000000;
                 if (!highPrice[`${code}`])
@@ -36,13 +36,8 @@ const updateCoin = () => {
 
                 let name = coin.name;
                 let currentPrice = coin.price;
-                let random = Math.floor(Math.random() * 3);
                 let imgURL = coin.imgURL;
-                let type = Math.floor(Math.random() * 100) < 50 ? 0 : 1;
-                let newPrice = type === 0 ? currentPrice - random : currentPrice + random;
-                if (newPrice < 0) {
-                    newPrice = 20.12;
-                }
+                let newPrice = parseFloat(coinInfo.data.price);
                 if (newPrice < lowPrice[`${code}`])
                     lowPrice[`${code}`] = newPrice;
                 if (newPrice > highPrice[`${code}`])
@@ -53,7 +48,7 @@ const updateCoin = () => {
                 listCoin.find(a => a.code == code).lastTypeUpdate = lastTypeUpdate;
 
                 listCoinPublish.push({ code: code, name: name, price: parseFloat(newPrice), oldPrice: parseFloat(currentPrice), lastTypeUpdate: lastTypeUpdate, imgURL: imgURL });
-            })
+            });
             if (countDown == 0) {
                 listCoinPublish.forEach((coin) => {
                     let openPri = 0;
@@ -75,7 +70,6 @@ const updateCoin = () => {
                 countDown = DEFAULT_COUNT_DOWN;
             }
             global.io.emit('priceList', listCoinPublish);
-
         } else {
             console.log('Not found Coin');
         }

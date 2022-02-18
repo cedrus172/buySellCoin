@@ -1,23 +1,44 @@
 const CoinModel = require('../model/Coin');
+const axios = require('axios');
 
-
-exports.newCoin = function(req, res, next) {
+exports.newCoin = async function(req, res, next) {
     req.body.code = req.body.code.toUpperCase();
-    CoinModel.findOne({ code: req.body.code }, function(error, coin) {
+    CoinModel.findOne({ code: req.body.code }, async function(error, coin) {
         if (coin) {
             res.json({ message: "Your coin code already exists, please choose another code", type: -12 });
         } else {
-            CoinModel.create(req.body, (err, coin) => {
-                if (err) throw err;
-                if (coin) {
-                    global.io.emit('addCoin', coin);
-                    res.json({ message: 'Add coin success', type: 1 })
+            let coinPrice = await exports.getPriceBySymbol(req.body.code);
+            console.log(coinPrice);
+            if (coinPrice.data) {
+                req.body.price = coinPrice.data.price;
+                CoinModel.create(req.body, (err, coin) => {
+                    if (err) throw err;
+                    if (coin) {
+                        global.io.emit('addCoin', coin);
+                        res.json({ message: 'Add coin success . Coin Price : ' + parseFloat(coinPrice.data.price).toFixed(2), type: 1 })
+                    } else {
+                        res.json({ message: "Create failed ", type: -11 });
+                    }
+                })
+            } else {
+                if (coinPrice == 0) {
+                    res.json({ message: 'Error', type: -1 });
                 } else {
-                    res.json({ message: "Create failed ", type: -11 });
+                    res.json({ message: coinPrice.data.msg, type: coinPrice.data.code })
                 }
-            })
+            }
+
         }
     });
+}
+
+exports.getPriceBySymbol = async(coin) => {
+    try {
+        let result = await axios.get(`https://api.binance.com/api/v3/ticker/price?symbol=${coin.toUpperCase()}USDT`);
+        return await result;
+    } catch (error) {
+        return 0.0;
+    }
 }
 
 
