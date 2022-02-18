@@ -1,4 +1,5 @@
 const CoinModel = require('../model/Coin');
+const PriceModel = require('../model/Price');
 const axios = require('axios');
 
 exports.newCoin = async function(req, res, next) {
@@ -57,6 +58,9 @@ exports.deleteCoinByCode = function(req, res, next) {
         if (error) throw error;
         if (detailCoin) {
             CoinModel.deleteOne({ code: code }, function(error, result) {
+                PriceModel.deleteMany({ code: code }, function(error, result) {
+                    if (error) throw error;
+                })
                 global.io.emit('removeCoin', code);
                 global.io.emit('notice', { type: "error", msg: `Admin just deleted a coin ${detailCoin.name} : ${infoCoin.PRICE}` })
                 res.json({ message: 'Deleted', type: 1 })
