@@ -30,7 +30,6 @@ const updateCoin = () => {
                 let code = coin.code;
                 let coinInfo = await coinController.getPriceBySymbol(code);
                 coinInfo = coinInfo.data.RAW[code]['USD'];
-
                 if (!lowPrice[`${code}`])
                     lowPrice[`${code}`] = 100000000000;
                 if (!highPrice[`${code}`])

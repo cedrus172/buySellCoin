@@ -1,6 +1,6 @@
 const UserModel = require('../model/User');
 const bcrypt = require('bcrypt');
-
+const transferController = require('../controllers/transferController')
 exports.getUserInfo = function(req, res, next) {
     let userId = req.session.userId;
     UserModel.findById(userId, function(err, user) {
@@ -96,6 +96,64 @@ exports.addCoinToUser = function(id, code, amount) {
             }
         } else {
             console.log('not found user');
+        }
+    })
+}
+
+exports.transferUsd = (req, res) => {
+    let userFrom = req.session.username.toLowerCase();
+    let userTo = req.body.username.toLowerCase();
+    if (userFrom == userTo) {
+        res.json({ message: `You can't transfer to yourself`, type: -102 })
+    }
+    let amount = parseFloat(req.body.amount);
+    let userIdto;
+    UserModel.findOne({ username: userFrom.toLowerCase() }, (err, user) => {
+        if (err) throw err;
+        if (user) {
+            if (parseFloat(user.usd) >= amount) {
+                let usdAfter = parseFloat(user.usd) - amount;
+                UserModel.findOne({ username: userTo.toLowerCase() }, (err, user) => {
+                    if (err) throw err;
+                    if (user) {
+                        userIdto = user._id.toString();
+                        console.log('transfer', userIdto);
+                        let usdAfterUpdate = parseFloat(user.usd) + amount;
+                        UserModel.updateOne({ username: userFrom.toLowerCase() }, {
+                            usd: usdAfter
+                        }, (err, result) => {
+                            if (err) throw err;
+                            if (result) {
+                                UserModel.updateOne({ username: userTo.toLowerCase() }, {
+                                    usd: usdAfterUpdate
+                                }, (err, result) => {
+                                    if (err) throw err;
+                                    if (result) {
+                                        transferController.createTransferLog({ userFrom: userFrom, userTo: userTo, amount: amount })
+                                        global.io.to(userIdto).emit('notice', { type: 'success', msg: `You got ${amount} from ${userFrom}` });
+                                        global.io.to(userIdto).emit('refreshHavingCoin', '');
+                                        res.json({ message: 'Transer successfully', type: 1 });
+                                    } else {
+                                        res.json({ message: 'a error occured', type: -12 });
+
+                                    }
+                                })
+                            } else {
+                                res.json({ message: 'a error occured', type: -12 });
+
+                            }
+                        })
+
+                    } else {
+                        res.json({ message: 'Username is not exists', type: -2 });
+                    }
+                })
+            } else {
+                res.json({ message: 'Not enough USD in your account', type: -111 })
+            }
+
+        } else {
+            res.json({ message: 'error', type: -1 });
         }
     })
 }

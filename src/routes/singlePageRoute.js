@@ -19,6 +19,18 @@ route.get('/login', (req, res) => {
         res.redirect("/");
 });
 
+route.get('/transfer', (req, res) => {
+    if (req.session.userId == null)
+        res.render("./singlePage/login");
+    else
+        res.render("./transfer", {
+            userid: req.session.userId,
+            username: req.session.username,
+            levelStaff: req.session.levelStaff,
+            usd: req.session.usd
+        })
+});
+
 
 route.get('/logout', userController.userLogout);
 

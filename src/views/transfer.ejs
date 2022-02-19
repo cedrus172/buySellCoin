@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--begin::Head-->
+<%- include('./layouts/header') -%>
+    <!--end::Head-->
+    <!--begin::Body-->
+
+    <body id="kt_body" class="header-fixed header-tablet-and-mobile-fixed aside-fixed aside-secondary-enabled">
+        <!--begin::Main-->
+        <!--begin::Root-->
+        <div class="d-flex flex-column flex-root">
+            <!--begin::Page-->
+            <div class="page d-flex flex-row flex-column-fluid">
+                <!--begin::Aside-->
+                <%- include('./layouts/aside') -%>
+                    <!--end::Aside-->
+                    <!--begin::Wrapper-->
+                    <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
+                        <!--begin::Header-->
+                        <div id="kt_header" class="header" data-kt-sticky="true" data-kt-sticky-name="header" data-kt-sticky-offset="{default: '200px', lg: '300px'}">
+                            <!--begin::Container-->
+                            <div class="container-xxl d-flex align-items-center justify-content-between" id="kt_header_container">
+                                <!--begin::Page title-->
+                                <div class="page-title d-flex flex-column align-items-start justify-content-center flex-wrap me-lg-2 pb-5 pb-lg-0" data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', lg: '#kt_header_container'}">
+                                    <!--begin::Heading-->
+                                    <h1 class="text-dark fw-bold my-0 fs-2" id="titlePage">
+                                        Transfer
+                                    </h1>
+                                    <!--end::Heading-->
+                                    <!--begin::Breadcrumb-->
+                                    <ul class="breadcrumb breadcrumb-line text-muted fw-bold fs-base my-1">
+                                        <li class="breadcrumb-item text-muted">
+                                            <a href="/" class="text-muted">Home</a>
+                                        </li>
+                                        <li class="breadcrumb-item text-dark">
+                                            Transfer
+                                        </li>
+                                    </ul>
+                                    <!--end::Breadcrumb-->
+                                </div>
+                                <!--end::Page title=-->
+                                <!--begin::Wrapper-->
+                                <%- include('./layouts/wrapper') -%>
+
+                                    <!--end::Wrapper-->
+
+                            </div>
+                            <!--end::Container-->
+                        </div>
+                        <!--end::Header-->
+                        <!--begin::Content-->
+                        <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+                            <!--begin::Container-->
+                            <div class="container-xxl" id="kt_content_container">
+
+                                <!--begin::Row-->
+                                <div class="row gy-5 g-xl-8">
+                                    <!--begin::Col-->
+                                    <div class="col-xl-4">
+                                        <!--begin::Tables Widget 3-->
+                                        <div class="card card-xl-stretch mb-5 mb-xl-8">
+                                            <!--begin::Header-->
+                                            <div class="card-header border-0 pt-5">
+                                                <h3 class="card-title align-items-start flex-column">
+                                                    <span class="card-label fw-bolder fs-3 mb-1">Transfer </span>
+                                                </h3>
+
+                                            </div>
+                                            <!--end::Header-->
+                                            <!--begin::Body-->
+                                            <div class="card-body py-3">
+                                                <!--begin::Table container-->
+                                                <div class="mb-7">
+                                                    <span class="badge badge-warning" id="yourBalance">Your USD : <%=usd%> $</span>
+                                                </div>
+
+                                                <!--begin::Input group-->
+                                                <div class="form-floating mb-7">
+                                                    <input type="number" class="form-control" id="amount" placeholder="Amount" />
+                                                    <label for="amount">Amount</label>
+                                                </div>
+                                                <!--end::Input group-->
+
+                                                <!--begin::Input group-->
+                                                <div class="form-floating mb-7">
+                                                    <input type="text" class="form-control" id="username" placeholder="Username get" />
+                                                    <label for="username">Username</label>
+                                                </div>
+                                                <!--end::Input group-->
+                                                <div class="mb-7">
+                                                    <button id="transferBtn" class="btn btn-warning w-100">
+                                                        TRANSFER
+                                                    </button>
+                                                </div>
+                                                <!--end::Table container-->
+                                            </div>
+                                            <!--begin::Body-->
+                                        </div>
+                                        <!--end::Tables Widget 3-->
+                                    </div>
+                                    <!--end::Col-->
+                                    <!--begin::Col-->
+                                    <div class="col-xl-8">
+                                        <!--begin::Tables Widget 3-->
+                                        <div class="card card-xl-stretch mb-5 mb-xl-8">
+                                            <!--begin::Header-->
+                                            <div class="card-header border-0 pt-5">
+                                                <h3 class="card-title align-items-start flex-column">
+                                                    <span class="card-label fw-bolder fs-3 mb-1">Histories</span>
+                                                </h3>
+
+                                            </div>
+                                            <!--end::Header-->
+                                            <!--begin::Body-->
+                                            <div class="card-body py-3">
+                                                <!--begin::Table container-->
+                                                <div class="table-responsive">
+                                                    <!--begin::Table-->
+                                                    <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
+                                                        <!--begin::Table head-->
+                                                        <thead>
+                                                            <tr class="fw-bolder text-muted">
+                                                                <th class="w-25px">
+                                                                    #
+                                                                </th>
+                                                                <th class="min-w-120">Sender</th>
+                                                                <th class="min-w-120px">Receiver</th>
+                                                                <th class="min-w-120px">Amount</th>
+                                                                <th class="min-w-140px">Time</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <!--end::Table head-->
+                                                        <!--begin::Table body-->
+                                                        <tbody id="tableDataTransfer">
+
+                                                        </tbody>
+                                                        <!--end::Table body-->
+                                                    </table>
+                                                    <!--end::Table-->
+                                                </div>
+                                                <!--end::Table container-->
+                                            </div>
+                                            <!--begin::Body-->
+                                        </div>
+                                        <!--end::Tables Widget 3-->
+                                    </div>
+                                    <!--end::Col-->
+                                </div>
+                                <!--end::Row-->
+
+                            </div>
+                            <!--end::Container-->
+                        </div>
+                        <!--end::Content-->
+                        <!--begin::Footer-->
+                        <%- include('./layouts/footer') -%>
+                            <!--end::Footer-->
+                    </div>
+                    <!--end::Wrapper-->
+            </div>
+            <!--end::Page-->
+        </div>
+        <!--end::Root-->
+
+
+        <!--begin::Scrolltop-->
+        <%- include('./layouts/scrolltop') -%>
+            <!--end::Scrolltop-->
+            <!--end::Main-->
+            <%- include('./layouts/scripts') -%>
+                <script>
+                    setActiveMenu('transfer');
+                    setTimeout(function() {
+                        socket.emit('userConnect', '<%=userid%>');
+                        socket.on('refreshHavingCoin', () => {
+                            reloadBalance();
+                        })
+                    }, 3000);
+                </script>
+                <script src="<%=global.full_url%>scripts/transfer.js">
+                </script>
+    </body>
+
+    <!--end::Body-->
+
+</html>

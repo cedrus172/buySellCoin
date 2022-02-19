@@ -15,6 +15,7 @@ const singlePageRoute = require('./routes/singlePageRoute');
 const coinRoute = require('./routes/coinRoutes');
 const orderRoute = require('./routes/orderRoutes');
 const priceRoute = require('./routes/priceRoutes');
+const transferRoute = require('./routes/transferRoutes');
 const adminRoute = require('./routes/adminRoutes');
 const expressSession = require('express-session');
 
@@ -66,6 +67,7 @@ app.use('/order', checkAuth, orderRoute);
 app.use('/api/coin', coinRoute);
 app.use('/api/user', userRoute);
 app.use('/api/price', checkAuth, priceRoute);
+app.use('/api/transfer', checkAuth, transferRoute)
 app.use('/api/order', checkAuth, orderRoute);
 app.use('/admin', checkAdmin, adminRoute);
 require('./managers/CoinMgr')();

@@ -105,5 +105,25 @@ const API = {
             method: "get",
             headers: { 'Content-Type': 'application/json' }
         });
+    },
+
+    transferUsd: function(username, amount) {
+        return $.ajax({
+            url: full_url + "api/user/transfer",
+            method: "post",
+            headers: { 'Content-Type': 'application/json' },
+            data: JSON.stringify({
+                username: username,
+                amount: amount
+            })
+        });
+    },
+
+    getListTransfer: function() {
+        return $.ajax({
+            url: full_url + "api/transfer/list/all",
+            method: "get",
+            headers: { 'Content-Type': 'application/json' }
+        });
     }
 }

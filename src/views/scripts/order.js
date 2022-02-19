@@ -2,12 +2,12 @@ $('#buyBtn').click(async() => {
     let amount = $('#amount').val();
     let result = await API.buyCoin(amount, COIN);
     if (result.type == 1) {
-        sendAlert(result.message, 'Success', "success");
+        setHavingCoin();
         $('#yourBalance').html(`Your USD : ${result.usdAfter.toFixed(2)}`);
         getHistories('BUY');
+        sendAlert(result.message, 'Success', "success");
     } else {
         sendAlert(result.message, 'Error', "error");
-
     }
 });
 
@@ -15,14 +15,21 @@ $('#sellBtn').click(async() => {
     let amount = $('#amount').val();
     let result = await API.sellCoin(amount, COIN);
     if (result.type == 1) {
-        sendAlert(result.message, 'Success', "success");
+        setHavingCoin();
         $('#yourBalance').html(`Your USD : ${result.usdAfter.toFixed(2)}`);
         $('#coinBalance').html(`Your ${COIN} : ${result.coinAfter.toFixed(2)}`);
         getHistories('SELL');
+        sendAlert(result.message, 'Success', "success");
     } else {
         sendAlert(result.message, 'Error', "error");
     }
 });
+
+const reloadBalance = async() => {
+    let profile = await API.getProfile();
+    $('#yourBalance').html(`Your USD : ${profile.usd.toFixed(2)}`);
+    $('#myUsd').html(`Your USD : ${result.usd} $`);
+}
 
 let tableHistories = $('#tableHistories');
 const tableHistoriesHandle = {

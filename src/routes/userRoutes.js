@@ -11,4 +11,6 @@ route.post('/login', upload.none(), userController.userLogin);
 
 route.get('/profile', userController.getUserInfo);
 
+route.post('/transfer', upload.none(), userController.transferUsd)
+
 module.exports = route;
