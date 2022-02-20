@@ -1,4 +1,4 @@
-const transferController = require('../controllers/TransferController');
+const transferController = require('../controllers/transferController');
 const express = require('express');
 const route = express.Router();
 
