@@ -28,7 +28,7 @@ $('#sellBtn').click(async() => {
 const reloadBalance = async() => {
     let profile = await API.getProfile();
     $('#yourBalance').html(`Your USD : ${profile.usd.toFixed(2)}`);
-    $('#myUsd').html(`Your USD : ${result.usd} $`);
+    $('#myUsd').html(`Your USD : ${profile.usd.toFixed(2)} $`);
 }
 
 let tableHistories = $('#tableHistories');

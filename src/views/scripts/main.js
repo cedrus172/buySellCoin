@@ -64,7 +64,7 @@ const tableCoinList = {
 
 const setHavingCoin = async() => {
     let result = await API.getProfile();
-    $('#myUsd').html(`Your USD : ${result.usd} $`);
+    $('#myUsd').html(`Your USD : ${result.usd.toFixed(2)} $`);
     if (isVisible(tableDataCoin)) {
         result.coin.forEach((coinBalance) => {
             tableCoinList.setHaving(coinBalance.code, coinBalance.amount.toFixed(2));
