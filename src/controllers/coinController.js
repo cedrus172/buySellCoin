@@ -33,7 +33,7 @@ exports.newCoin = async function(req, res, next) {
 
 exports.getPriceBySymbol = async(coin) => {
     try {
-        let result = await axios.get(`https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${coin.toUpperCase()}&tsyms=USD&api_key=e14024efbd3d3cbb16545473eff3c570131bd71052b80d84ea805963243e2237`);
+        let result = await axios.get(`https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${coin.toUpperCase()}&tsyms=USD`);
         return await result;
     } catch (error) {
         return 0.0;
@@ -62,7 +62,7 @@ exports.deleteCoinByCode = function(req, res, next) {
                     if (error) throw error;
                 })
                 global.io.emit('removeCoin', code);
-                global.io.emit('notice', { type: "error", msg: `Admin just deleted a coin ${detailCoin.name} : ${infoCoin.PRICE}` })
+                global.io.emit('notice', { type: "error", msg: `Admin just deleted a coin ${detailCoin.name} : ${detailCoin.price}` })
                 res.json({ message: 'Deleted', type: 1 })
             })
         } else {
