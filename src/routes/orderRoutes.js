@@ -9,6 +9,7 @@ route.get('/buy/:code', (req, res) => {
         if (findCoin)
             coinBalance = findCoin.amount;
         res.render('orderBuy', {
+            userid: req.session.userId,
             code: req.params.code,
             username: req.session.username,
             levelStaff: req.session.levelStaff,
@@ -25,6 +26,7 @@ route.get('/sell/:code', (req, res) => {
         if (findCoin)
             coinBalance = findCoin.amount;
         res.render('orderSell', {
+            userid: req.session.userId,
             code: req.params.code,
             username: req.session.username,
             levelStaff: req.session.levelStaff,
