@@ -33,7 +33,7 @@ exports.newCoin = async function(req, res, next) {
 
 exports.getPriceBySymbol = async(coin) => {
     try {
-        let result = await axios.get(`https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${coin.toUpperCase()}&tsyms=USD`);
+        let result = await axios.get(`https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${coin.toUpperCase()}&tsyms=USD&api_key=8542b28db69848ecc51140764f3303135bd1a62bd153441cbbb71d60c5a28b4f`);
         return await result;
     } catch (error) {
         return 0.0;
