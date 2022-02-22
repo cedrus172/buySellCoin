@@ -18,7 +18,7 @@ const tableCoinList = {
         let content = `<tr id="row-${code}">
         <td>
         <div class="d-flex justify-content-start flex-column">
-        <span class="text-dark fw-bolder text-hover-primary fs-6">${number}</span>
+        <span class="text-dark fw-bolder text-hover-primary fs-6 numberRow">${number}</span>
          </div>
         </td>
         <td>
@@ -56,9 +56,18 @@ const tableCoinList = {
     removeRow: function(code) {
         let row = $(`#row-${code}`);
         row.remove();
+        this.rerenderNumberRows();
     },
     setHaving: function(code, amount) {
         $(`#having-${code}`).html(amount);
+    },
+    rerenderNumberRows: function() {
+        let num = 0;
+        let numberRow = document.querySelectorAll('.numberRow');
+        numberRow.forEach((row) => {
+            num++;
+            row.innerHTML = num;
+        })
     }
 }
 
